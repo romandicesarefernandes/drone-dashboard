@@ -1,0 +1,45 @@
+.root {
+    -fx-font-family: "Segoe UI";
+    -fx-font-size: 13px;
+    -fx-background-color: white;
+}
+
+.top-bar {
+    -fx-background-color: #2e7d32;
+}
+
+.top-bar .label {
+    -fx-text-fill: white;
+}
+
+.product-title {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+}
+
+.sidebar {
+    -fx-background-color: #f1f5f1;
+    -fx-border-color: lightgray;
+    -fx-border-width: 0 1 0 0;
+}
+
+.nav-button {
+    -fx-alignment: center-left;
+}
+
+.screen-title {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+}
+
+.use-case-line {
+    -fx-text-fill: #444444;
+}
+
+.placeholder {
+    -fx-text-fill: #888888;
+    -fx-font-style: italic;
+    -fx-padding: 20;
+    -fx-border-color: #cccccc;
+    -fx-border-style: dashed;
+}
