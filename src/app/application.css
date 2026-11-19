@@ -1,8 +1,10 @@
 .root {
     -fx-font-family: "Segoe UI";
     -fx-font-size: 13px;
-    -fx-background-color: white;
+    -fx-background-color: #f6f8f6;
 }
+
+/* ---------- top bar and sidebar ---------- */
 
 .top-bar {
     -fx-background-color: #2e7d32;
@@ -17,14 +19,120 @@
     -fx-font-weight: bold;
 }
 
+.sidebar {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #dde3dd;
+    -fx-border-width: 0 1 0 0;
+}
+
+.nav-button {
+    -fx-alignment: center-left;
+    -fx-background-color: transparent;
+    -fx-background-radius: 6;
+    -fx-padding: 8 12 8 12;
+    -fx-text-fill: #333333;
+}
+
+.nav-button:hover {
+    -fx-background-color: #eef4ee;
+}
+
+.nav-button:selected {
+    -fx-background-color: #e3efe3;
+    -fx-text-fill: #1b5e20;
+    -fx-font-weight: bold;
+}
+
+/* ---------- pages ---------- */
+
+.page-title {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1b3d1d;
+}
+
+.page-subtitle {
+    -fx-text-fill: #667066;
+}
+
+.card {
+    -fx-background-color: white;
+    -fx-background-radius: 8;
+    -fx-border-color: #dde3dd;
+    -fx-border-radius: 8;
+}
+
+.card-title, .section-title {
+    -fx-font-weight: bold;
+    -fx-text-fill: #2e4d30;
+}
+
+.detail-label {
+    -fx-text-fill: #667066;
+}
+
+.placeholder-note {
+    -fx-text-fill: #8a948a;
+    -fx-font-size: 15px;
+}
+
+.primary-button {
+    -fx-base: #2e7d32;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.report-title {
+    -fx-font-size: 17px;
+    -fx-font-weight: bold;
+}
+
+.preview-scroll, .preview-scroll > .viewport {
+    -fx-background-color: white;
+    -fx-background: white;
+    -fx-border-color: transparent;
+}
+
+.status-active {
+    -fx-text-fill: #2e7d32;
+    -fx-font-weight: bold;
+}
+
+.status-pending {
+    -fx-text-fill: #e07b00;
+    -fx-font-weight: bold;
+}
+
+.status-inactive {
+    -fx-text-fill: #8a8a8a;
+}
+
+.status-idle {
+    -fx-text-fill: #1e6fb8;
+    -fx-font-weight: bold;
+}
+
+.status-missing {
+    -fx-text-fill: #c62828;
+    -fx-font-weight: bold;
+}
+
+.status-warning {
+    -fx-text-fill: #d06b00;
+    -fx-font-weight: bold;
+}
+
+.equipment-map {
+    -fx-border-color: #8d6e63;
+    -fx-border-width: 1;
+}
+
+/* ---------- Fields page (farm setup) ---------- */
+
 .side-panel {
     -fx-background-color: #f1f5f1;
     -fx-border-color: lightgray;
     -fx-border-width: 0 1 0 0;
-}
-
-.section-title {
-    -fx-font-weight: bold;
 }
 
 .farm-frame {
@@ -36,6 +144,8 @@
     -fx-background-color: #fbfaf3;
 }
 
+/* ---------- status bar and errors ---------- */
+
 .status-bar {
     -fx-background-color: #eeeeee;
     -fx-border-color: lightgray;
@@ -45,3 +155,16 @@
 .error-text {
     -fx-text-fill: #c62828;
 }
+
+/* ---------- report charts: same colours as the PDF export ---------- */
+
+.default-color0.chart-series-line { -fx-stroke: #2e7d32; }
+.default-color1.chart-series-line { -fx-stroke: #2178b5; }
+.default-color2.chart-series-line { -fx-stroke: #e67d21; }
+.default-color3.chart-series-line { -fx-stroke: #8f45ad; }
+.default-color0.chart-line-symbol { -fx-background-color: #2e7d32, white; }
+.default-color1.chart-line-symbol { -fx-background-color: #2178b5, white; }
+.default-color2.chart-line-symbol { -fx-background-color: #e67d21, white; }
+.default-color3.chart-line-symbol { -fx-background-color: #8f45ad, white; }
+.default-color0.chart-bar { -fx-bar-fill: #2e7d32; }
+.chart-series-line { -fx-stroke-width: 2px; }
