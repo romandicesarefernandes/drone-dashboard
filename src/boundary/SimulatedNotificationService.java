@@ -1,6 +1,7 @@
 package boundary;
 
 import entity.ReportSchedule;
+import entity.Alert;
 import entity.User;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -26,6 +27,15 @@ public class SimulatedNotificationService implements NotificationInterface {
         send("Scheduled report: " + schedule.reportType() + " (" + schedule.fields() + "), "
                 + schedule.frequency().toLowerCase() + " on " + schedule.deliveryDay() + ".");
     }
+
+@Override
+public void sendAlert(Alert alert) {
+    send("Farm alert | Severity: " + alert.severity()
+            + " | Field ID: " + alert.fieldId()
+            + " | Message: " + alert.message()
+            + " | Raised: " + alert.raisedAt());
+}
+
 
     public List<String> getOutbox() {
         return Collections.unmodifiableList(outbox);
