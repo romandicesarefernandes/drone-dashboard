@@ -1,5 +1,6 @@
 package app;
-
+import boundary.AlertsUI;
+import control.AlertController;
 import boundary.CropHealthUI;
 import boundary.EquipmentTrackerUI;
 import boundary.FarmSetupUI;
@@ -120,7 +121,9 @@ public final class Dashboard {
         add(new HarvestReadinessUI(new HarvestReadinessController(growth), status::setText));
         add(new EquipmentTrackerUI(new EquipmentController(store, new SimulatedGpsTagService()),
                 () -> stage, status::setText));
-        add(new PlaceholderUI("Alerts", "Alerts", "UC-08 Receive Alerts and Notifications"));
+
+        add(new AlertsUI(new AlertController(store)));
+
         add(new ReportsUI(new ReportController(store, notifier), () -> stage, status::setText));
         add(new UserManagementUI(new UserManagementController(store, notifier), () -> stage, status::setText));
     }
