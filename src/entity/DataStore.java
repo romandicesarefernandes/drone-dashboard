@@ -29,10 +29,12 @@ public final class DataStore {
     private final List<Equipment> equipment = new ArrayList<>();
     private final List<FieldBoundary> boundaries = new ArrayList<>();
     private final List<Mission> missions = new ArrayList<>();
+    private final List<FlightPlan> flightPlans = new ArrayList<>();
+    private final List<MissionSchedule> missionSchedules = new ArrayList<>();
     private final List<Report> reports = new ArrayList<>();
     private final List<ReportSchedule> schedules = new ArrayList<>();
 
-    private int lastUserId, lastReportId, lastScheduleId;
+    private int lastUserId, lastReportId, lastScheduleId, lastMissionId, lastFlightPathId;
 
     /** Empty store; use getInstance() in the app. Public so tests can build their own data. */
     public DataStore() { }
@@ -48,12 +50,16 @@ public final class DataStore {
     public List<Equipment> equipment() { return equipment; }
     public List<FieldBoundary> boundaries() { return boundaries; }
     public List<Mission> missions() { return missions; }
+    public List<FlightPlan> flightPlans() { return flightPlans; }
+    public List<MissionSchedule> missionSchedules() { return missionSchedules; }
     public List<Report> reports() { return reports; }
     public List<ReportSchedule> schedules() { return schedules; }
 
     public int nextUserId() { return ++lastUserId; }
     public int nextReportId() { return ++lastReportId; }
     public int nextScheduleId() { return ++lastScheduleId; }
+    public int nextMissionId() { return ++lastMissionId; }
+    public int nextFlightPathId() { return ++lastFlightPathId; }
 
     public Field findField(int fieldId) {
         for (Field f : fields) {
