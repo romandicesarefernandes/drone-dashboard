@@ -1,7 +1,9 @@
 package app;
 
+import boundary.CropHealthUI;
 import boundary.EquipmentTrackerUI;
 import boundary.FarmSetupUI;
+import boundary.HarvestReadinessUI;
 import boundary.NotificationInterface;
 import boundary.MissionsUI;
 import boundary.Page;
@@ -9,9 +11,13 @@ import boundary.PlaceholderUI;
 import boundary.ReportsUI;
 import boundary.SimulatedGpsTagService;
 import boundary.SimulatedNotificationService;
+import boundary.SoilMoistureUI;
 import boundary.UserManagementUI;
+import control.CropGrowthController;
 import control.EquipmentController;
+import control.HarvestReadinessController;
 import control.ReportController;
+import control.SoilMoistureController;
 import control.UserManagementController;
 import entity.DataStore;
 import java.util.LinkedHashMap;
@@ -108,9 +114,10 @@ public final class Dashboard {
                 "Overview of alerts, soil moisture, crop health and equipment (UC-04, UC-05, UC-07, UC-08)"));
         add(new FarmSetupUI(() -> stage, status::setText));
         add(new MissionsUI(store));
-        add(new PlaceholderUI("Soil Moisture", "Soil Moisture", "UC-04 Monitor Soil Moisture"));
-        add(new PlaceholderUI("Crop Health", "Crop Health", "UC-05 Monitor Crop Growth"));
-        add(new PlaceholderUI("Harvest", "Harvest Readiness", "UC-06 Determine Harvest Readiness"));
+        CropGrowthController growth = new CropGrowthController(store);
+        add(new SoilMoistureUI(new SoilMoistureController(store), () -> stage, status::setText));
+        add(new CropHealthUI(growth, status::setText));
+        add(new HarvestReadinessUI(new HarvestReadinessController(growth), status::setText));
         add(new EquipmentTrackerUI(new EquipmentController(store, new SimulatedGpsTagService()),
                 () -> stage, status::setText));
         add(new PlaceholderUI("Alerts", "Alerts", "UC-08 Receive Alerts and Notifications"));

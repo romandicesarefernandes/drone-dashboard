@@ -10,14 +10,33 @@ The sidebar has the screens from the team's wireframes:
 | ---- | -------- | ----- |
 | Dashboard | Overview (UC-04, UC-05, UC-07, UC-08) | Blank |
 | Fields | UC-01: farm layout setup, visualization, drone flights | Implemented (see below) |
-| Missions | UC-02, UC-03 | Implemented (simulated drone/weather services) |
-| Soil Moisture | UC-04 | Blank |
-| Crop Health | UC-05 | Blank |
-| Harvest | UC-06 | Blank |
+| Missions | UC-02, UC-03 | Demo |
+| Soil Moisture | UC-04 Monitor Soil Moisture | Demo |
+| Crop Health | UC-05 Monitor Crop Growth | Demo |
+| Harvest | UC-06 Determine Harvest Readiness | Demo |
 | Equipment | UC-07 Track Equipment Location and Inventory | Implemented |
 | Alerts | UC-08 | Blank |
 | Reports | UC-09 Generate Farm Reports | Implemented |
 | Users & Settings | UC-10 Manage Users and Roles | Implemented |
+
+**Soil Moisture (demo):** pick a field and scan date for a heat map of 96
+zones (hover or click a zone for its value), a summary, the 30-day trend and
+the zones below the low threshold. **Save Thresholds** changes the field's
+low / high limits, **Request Scan** schedules a soil-moisture mission and
+**Export** saves the zone readings as CSV. Opens on South Field, 22 Oct (dry spell).
+
+**Crop Health (demo):** pick a field and flight for an NDVI map, the field's
+growth stage, actual vs expected NDVI, and growth by zone (NW, NE, SW, SE).
+Zones more than 15% below expected are flagged. **Request Scan** schedules a
+crop-growth mission. Opens on East Orchard, whose NE corner lags behind.
+
+**Harvest (demo):** readiness by field from the latest crop flight, with the
+recommended harvest window, estimated yield and data age (older than 7 days is
+flagged). Select a field in the plan, then **Mark Ready to Harvest** (fields
+at 60% or more) or **Schedule Harvest Scan**.
+
+Zone values on these three pages come from each field's single sample reading
+plus a fixed pattern per field, since the sample data has one value per scan.
 
 **Reports:** pick report type (Farm Summary, Soil Moisture, Crop Growth,
 Harvest Readiness, Equipment Usage, Drone Missions), field and period, then
@@ -117,18 +136,11 @@ not used, because Windows Smart App Control blocks its unsigned DLLs.
 | Package | Contents |
 | ------- | -------- |
 | `app` | `Launcher`, `FarmApplication` (JavaFX entry), `Dashboard` (singleton window with sidebar), `application.css` |
-| `boundary` | Pages (`FarmSetupUI`, `EquipmentTrackerUI`, `ReportsUI`, `UserManagementUI`, `PlaceholderUI`), `NotificationInterface`, `EquipmentGPSTagInterface` and their simulated services |
-| `control` | `EquipmentController`, `ReportController`, `UserManagementController`, `ReportExporter` (+ `SimplePdf`) |
+| `boundary` | Pages (`FarmSetupUI`, `SoilMoistureUI`, `CropHealthUI`, `HarvestReadinessUI`, `EquipmentTrackerUI`, `ReportsUI`, `UserManagementUI`, `PlaceholderUI`), `NotificationInterface`, `EquipmentGPSTagInterface` and their simulated services |
+| `control` | `EquipmentController`, `ReportController`, `UserManagementController`, `SoilMoistureController`, `CropGrowthController`, `HarvestReadinessController`, `ReportExporter` (+ `SimplePdf`) |
 | `entity` | `Farm`, `Field`, `FieldBoundary`, `User`, `Report`, `SoilMoistureReading`, `CropGrowthRecord`, `Alert`, `Equipment`, `Mission`, `ReportSchedule`, `DataStore`, `SampleData` |
 | `farm` | `FarmComponent`, `AbstractFarmComponent`, `Item`, `ItemContainer`, `Property`, `SampleFarm` |
 | `farm.commands` | `Command`, `AddCommand`, `DeleteCommand`, `ChangePropertyCommand` |
 | `ui` | `FarmView` (800 x 600 visualization + drone animation), `AddDialog` |
 
 `boundary` / `control` / `entity` follow the team's UML class diagram.
-
-
-## Missions page (UC-02 / UC-03)
-
-The Missions page supports selecting multiple mapped fields, choosing a soil-moisture, crop-growth or equipment scan, selecting a simulated ready drone, generating a lawn-mower-style preview route, reviewing estimated flight time/battery/coverage/waypoints, and saving a flight plan. Saved plans can be scheduled once or on daily, weekly (selected weekdays), or monthly recurrence. The page checks the simulated weather/daylight conditions, battery reserve, and existing scheduled drone bookings, then lists generated occurrences in Upcoming Missions.
-
-Drone inventory and weather are simulated in `MissionController`; they are not connected to a physical drone or live weather API. The route preview uses the existing `FieldBoundary` coordinate system. The current sample project does not define no-fly-zone geometry, so radio-mast exclusion-zone routing must be added when that farm data is available. Data remains in memory and is lost when the app closes.
