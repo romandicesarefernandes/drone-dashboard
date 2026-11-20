@@ -10,7 +10,7 @@ The sidebar has the screens from the team's wireframes:
 | ---- | -------- | ----- |
 | Dashboard | Overview (UC-04, UC-05, UC-07, UC-08) | Blank |
 | Fields | UC-01: farm layout setup, visualization, drone flights | Implemented (see below) |
-| Missions | UC-02, UC-03 | Blank |
+| Missions | UC-02, UC-03 | Demo |
 | Soil Moisture | UC-04 Monitor Soil Moisture | Demo |
 | Crop Health | UC-05 Monitor Crop Growth | Demo |
 | Harvest | UC-06 Determine Harvest Readiness | Demo |

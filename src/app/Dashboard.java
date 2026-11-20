@@ -5,6 +5,7 @@ import boundary.EquipmentTrackerUI;
 import boundary.FarmSetupUI;
 import boundary.HarvestReadinessUI;
 import boundary.NotificationInterface;
+import boundary.MissionsUI;
 import boundary.Page;
 import boundary.PlaceholderUI;
 import boundary.ReportsUI;
@@ -112,8 +113,7 @@ public final class Dashboard {
         add(new PlaceholderUI("Dashboard", "Dashboard Home",
                 "Overview of alerts, soil moisture, crop health and equipment (UC-04, UC-05, UC-07, UC-08)"));
         add(new FarmSetupUI(() -> stage, status::setText));
-        add(new PlaceholderUI("Missions", "Missions",
-                "UC-02 Plan Automated Flight Path, UC-03 Schedule Drone Mission"));
+        add(new MissionsUI(store));
         CropGrowthController growth = new CropGrowthController(store);
         add(new SoilMoistureUI(new SoilMoistureController(store), () -> stage, status::setText));
         add(new CropHealthUI(growth, status::setText));
