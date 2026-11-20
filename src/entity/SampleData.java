@@ -76,6 +76,9 @@ public final class SampleData {
         }
     }
 
+    /** Expected NDVI per field (index = fieldId): {first scan, last scan}, straight line between. */
+    public static final double[][] NDVI_CURVE = { {}, { 0.84, 0.55 }, { 0.79, 0.64 }, { 0.28, 0.63 }, { 0.81, 0.50 } };
+
     /** A crop-growth scan of every field each Wednesday. East Orchard shows stress on 14 October. */
     private static void loadCropGrowth(DataStore s) {
         Random rnd = new Random(7);
@@ -86,7 +89,7 @@ public final class SampleData {
             { "Germination", "Germination", "Tillering", "Tillering", "Tillering", "Tillering", "Tillering", "Tillering" },
             { "Pod Fill", "Pod Fill", "Seed Fill", "Seed Fill", "Seed Fill", "Mature", "Mature", "Mature" },
         };
-        double[][] ndvi = { {}, { 0.84, 0.55 }, { 0.79, 0.64 }, { 0.28, 0.63 }, { 0.81, 0.50 } };   // {start, end}
+        double[][] ndvi = NDVI_CURVE;
         LocalDate first = DATA_START.with(DayOfWeek.WEDNESDAY).isBefore(DATA_START)
                 ? DATA_START.with(DayOfWeek.WEDNESDAY).plusWeeks(1) : DATA_START.with(DayOfWeek.WEDNESDAY);
         int weeks = (int) ((DATA_END.toEpochDay() - first.toEpochDay()) / 7);
