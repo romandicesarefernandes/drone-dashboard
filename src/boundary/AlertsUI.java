@@ -15,6 +15,14 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.layout.HBox;
 import javafx.collections.transformation.FilteredList;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.ButtonType;
+import javafx.scene.layout.VBox;
+import javafx.scene.control.TextArea;
+import entity.User;
+import javafx.scene.control.ChoiceDialog;
+import java.util.Optional;
 
 public class AlertsUI implements Page {
 
@@ -139,32 +147,143 @@ public class AlertsUI implements Page {
 
         // Display alerts
         refreshAlerts();
+        
+        Button detailsButton = new Button("View Details");
 
-        Button acknowledgeButton = new Button("Acknowledge Selected Alert");
-
-        acknowledgeButton.setOnAction(event -> {
+        detailsButton.setOnAction(event -> {
             Alert selectedAlert = alertTable.getSelectionModel().getSelectedItem();
 
             if (selectedAlert != null) {
-                boolean updated = controller.acknowledgeAlert(
-                    selectedAlert.alertId()
-                );
-
-                if (updated) {
-                    refreshAlerts();
-                }
+                showAlertDetails(selectedAlert);
             }
         });
+        
+        Button acknowledgeButton = new Button("Acknowledge Selected Alert");
+
+
+acknowledgeButton.setOnAction(event -> {
+
+    Alert selectedAlert =
+            alertTable.getSelectionModel().getSelectedItem();
+
+    if (selectedAlert == null ||
+            selectedAlert.status().equalsIgnoreCase("Acknowledged")) {
+        return;
+    }
+
+    if (controller.getUsers().isEmpty()) {
+        return;
+    }
+
+    ChoiceDialog<User> dialog = new ChoiceDialog<>(
+            null,
+            controller.getUsers()
+    );
+
+    dialog.setTitle("Acknowledge Alert");
+    dialog.setHeaderText(
+            "Acknowledge Alert #" + selectedAlert.alertId());
+    dialog.setContentText("Select your user account:");
+
+    Optional<User> result = dialog.showAndWait();
+
+    if (result.isPresent()) {
+        boolean updated = controller.acknowledgeAlert(
+                selectedAlert.alertId(),
+                result.get()
+        );
+
+        if (updated) {
+            refreshAlerts();
+        }
+    }
+});
+
+
+        HBox actions = new HBox(10, detailsButton, acknowledgeButton);
 
         view.setCenter(Page.card(
             "Farm Alerts",
             filters,
             alertTable,
-            acknowledgeButton
+            actions
         ));
         BorderPane.setMargin(view.getCenter(), new Insets(16));
     }
 
+
+private void showAlertDetails(Alert alert) {
+
+    Dialog<Void> dialog = new Dialog<>();
+    dialog.setTitle("Alert Details");
+    dialog.setHeaderText("Alert #" + alert.alertId());
+
+    dialog.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
+
+    VBox details = new VBox(10);
+    details.setPadding(new Insets(15));
+
+    Label field = new Label(
+            "Field: " + controller.getFieldName(alert.fieldId()));
+
+    Label severity = new Label(
+            "Severity: " + alert.severity());
+
+    Label status = new Label(
+            "Status: " + alert.status());
+
+    Label raisedAt = new Label(
+            "Raised At: " + alert.raisedAt());
+
+    Label messageLabel = new Label("Alert Message:");
+
+    TextArea message = new TextArea(alert.message());
+    message.setEditable(false);
+    message.setWrapText(true);
+    message.setPrefRowCount(3);
+
+    details.getChildren().addAll(
+            field,
+            severity,
+            status,
+            raisedAt,
+            messageLabel,
+            message
+    );
+
+Label historyHeader = new Label("Acknowledgment History");
+
+historyHeader.setStyle("-fx-font-weight: bold;");
+
+details.getChildren().add(historyHeader);
+
+var history = controller.getAcknowledgmentHistory(alert.alertId());
+
+if (history.isEmpty()) {
+    details.getChildren().add(
+            new Label("No acknowledgment history recorded.")
+    );
+} else {
+    for (var entry : history) {
+        Label record = new Label(
+                "Acknowledged by: " + entry.userName()
+                + "\nUser ID: " + entry.userId()
+                + "\nAcknowledged at: "
+                + entry.acknowledgedAt().format(
+                        java.time.format.DateTimeFormatter.ofPattern(
+                                "MM/dd/yyyy HH:mm"
+                        )
+                )
+        );
+
+        details.getChildren().add(record);
+    }
+}
+
+
+    dialog.getDialogPane().setContent(details);
+    dialog.showAndWait();
+}
 
 private void refreshAlerts() {
 

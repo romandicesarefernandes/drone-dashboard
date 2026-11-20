@@ -107,25 +107,42 @@ public final class Dashboard {
     }
 
     private void createPages() {
+
         DataStore store = DataStore.getInstance();
         NotificationInterface notifier = new SimulatedNotificationService();
 
         add(new PlaceholderUI("Dashboard", "Dashboard Home",
                 "Overview of alerts, soil moisture, crop health and equipment (UC-04, UC-05, UC-07, UC-08)"));
+
         add(new FarmSetupUI(() -> stage, status::setText));
+
         add(new PlaceholderUI("Missions", "Missions",
                 "UC-02 Plan Automated Flight Path, UC-03 Schedule Drone Mission"));
+
         CropGrowthController growth = new CropGrowthController(store);
-        add(new SoilMoistureUI(new SoilMoistureController(store), () -> stage, status::setText));
+        SoilMoistureController soilController = new SoilMoistureController(store);
+        AlertController alertController = new AlertController(store, notifier);
+
+        add(new SoilMoistureUI(soilController, () -> stage, status::setText));
+
         add(new CropHealthUI(growth, status::setText));
-        add(new HarvestReadinessUI(new HarvestReadinessController(growth), status::setText));
-        add(new EquipmentTrackerUI(new EquipmentController(store, new SimulatedGpsTagService()),
+
+        add(new HarvestReadinessUI(
+                new HarvestReadinessController(growth), status::setText));
+
+        add(new EquipmentTrackerUI(
+                new EquipmentController(store, new SimulatedGpsTagService()),
                 () -> stage, status::setText));
 
-        add(new AlertsUI(new AlertController(store)));
+        add(new AlertsUI(alertController));
 
-        add(new ReportsUI(new ReportController(store, notifier), () -> stage, status::setText));
-        add(new UserManagementUI(new UserManagementController(store, notifier), () -> stage, status::setText));
+        add(new ReportsUI(
+                new ReportController(store, notifier),
+                () -> stage, status::setText));
+
+        add(new UserManagementUI(
+                new UserManagementController(store, notifier),
+                () -> stage, status::setText));
     }
 
     private void add(Page page) {
