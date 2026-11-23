@@ -1,5 +1,6 @@
 package app;
-
+import boundary.AlertsUI;
+import control.AlertController;
 import boundary.CropHealthUI;
 import boundary.EquipmentTrackerUI;
 import boundary.FarmSetupUI;
@@ -107,22 +108,39 @@ public final class Dashboard {
     }
 
     private void createPages() {
+
         DataStore store = DataStore.getInstance();
         NotificationInterface notifier = new SimulatedNotificationService();
 
         add(new PlaceholderUI("Dashboard", "Dashboard Home",
                 "Overview of alerts, soil moisture, crop health and equipment (UC-04, UC-05, UC-07, UC-08)"));
+
         add(new FarmSetupUI(() -> stage, status::setText));
         add(new MissionsUI(store));
         CropGrowthController growth = new CropGrowthController(store);
-        add(new SoilMoistureUI(new SoilMoistureController(store), () -> stage, status::setText));
+        SoilMoistureController soilController = new SoilMoistureController(store);
+        AlertController alertController = new AlertController(store, notifier);
+
+        add(new SoilMoistureUI(soilController, () -> stage, status::setText));
+
         add(new CropHealthUI(growth, status::setText));
-        add(new HarvestReadinessUI(new HarvestReadinessController(growth), status::setText));
-        add(new EquipmentTrackerUI(new EquipmentController(store, new SimulatedGpsTagService()),
+
+        add(new HarvestReadinessUI(
+                new HarvestReadinessController(growth), status::setText));
+
+        add(new EquipmentTrackerUI(
+                new EquipmentController(store, new SimulatedGpsTagService()),
                 () -> stage, status::setText));
-        add(new PlaceholderUI("Alerts", "Alerts", "UC-08 Receive Alerts and Notifications"));
-        add(new ReportsUI(new ReportController(store, notifier), () -> stage, status::setText));
-        add(new UserManagementUI(new UserManagementController(store, notifier), () -> stage, status::setText));
+
+        add(new AlertsUI(alertController));
+
+        add(new ReportsUI(
+                new ReportController(store, notifier),
+                () -> stage, status::setText));
+
+        add(new UserManagementUI(
+                new UserManagementController(store, notifier),
+                () -> stage, status::setText));
     }
 
     private void add(Page page) {
